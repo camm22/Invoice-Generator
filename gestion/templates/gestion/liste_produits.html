@@ -1,0 +1,32 @@
+<h1>Liste des produits</h1>
+<a href="{% url 'ajouter_produit' %}">Ajouter un produit</a>
+<ul>
+  {% for produit in page_obj %}
+    <li>
+      {{produit.id}} - {{ produit.nom }} - {{ produit.prix }}€ - {{ produit.date_peremption }}
+      <a href="{% url 'modifier_produit' produit.id %}">Modifier</a>
+      <a href="{% url 'supprimer_produit' produit.id %}">Supprimer</a>
+    </li>
+  {% empty %}
+    <li>Aucun produit trouvé.</li>
+  {% endfor %}
+</ul>
+
+
+<div>
+  {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">Page précédente</a>
+  {% endif %}
+
+  <span>Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">Page suivante</a>
+  {% endif %}
+</div>
+
+<div>
+  <a href="{% url 'liste_factures' %}">
+    <button>Voir les factures</button>
+  </a>
+</div>

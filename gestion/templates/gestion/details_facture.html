@@ -1,0 +1,20 @@
+<h1>Détails de la facture {{ facture.id }}</h1>
+<p>Date de création : {{ facture.date_creation }}</p>
+<p>Nombre total de produits : {{ facture.produits.count }}</p>
+<p>Prix Total : {{ facture.total }}€</p>
+<h3>Produits associés :</h3>
+<ul>
+  {% for produit in facture.produits.all %}
+    <li>{{ produit.nom }} - {{ produit.prix }}€</li>
+  {% endfor %}
+</ul>
+
+<div>
+  <a href="{% url 'telecharger_facture' facture.id %}">
+    <button>Télécharger la facture (.txt)</button>
+  </a>
+</div>
+
+<div>
+  <a href="{% url 'liste_factures' %}">Retour à la liste des factures</a>
+</div>
