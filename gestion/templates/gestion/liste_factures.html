@@ -1,32 +1,59 @@
-<h1>Liste des factures</h1>
-<a href="{% url 'ajouter_facture' %}">Ajouter une facture</a>
-<ul>
-  {% for facture in page_obj %}
-    <li>
-      Facture: {{ facture.id }} - Date: {{ facture.date_facture }} - Produits: {{ facture.produits.count }}
-      <a href="{% url 'modifier_facture' facture.id %}">Modifier</a>
-      <a href="{% url 'supprimer_facture' facture.id %}">Supprimer</a>
-      <a href="{% url 'details_facture' facture.id %}">Détails</a>
-    </li>
-  {% empty %}
-    <li>Aucune facture trouvée.</li>
-  {% endfor %}
-</ul>
+{% extends "base.html" %}
+{% block title %}Liste des factures{% endblock %}
 
-<div>
-  {% if page_obj.has_previous %}
-    <a href="?page={{ page_obj.previous_page_number }}">Page précédente</a>
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Liste des factures</h1>
+    <a href="{% url 'ajouter_facture' %}" class="btn btn-success">Ajouter une facture</a>
+  </div>
+
+  {% if page_obj %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date de facture</th>
+          <th>Nombre de produits</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for facture in page_obj %}
+          <tr>
+            <td>{{ facture.id }}</td>
+            <td>{{ facture.date_creation }}</td>
+            <td>{{ facture.produits.count }}</td>
+            <td>
+              <a href="{% url 'modifier_facture' facture.id %}" class="btn btn-primary btn-sm me-1">Modifier</a>
+              <a href="{% url 'supprimer_facture' facture.id %}" class="btn btn-danger btn-sm me-1">Supprimer</a>
+              <a href="{% url 'details_facture' facture.id %}" class="btn btn-info btn-sm text-white">Détails</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Aucune facture trouvée.</p>
   {% endif %}
 
-  <span>Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
-
-  {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}">Page suivante</a>
-  {% endif %}
+  <!-- Pagination -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Précédente</a>
+        </li>
+      {% endif %}
+      <li class="page-item disabled">
+        <span class="page-link">Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+      </li>
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Suivante</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
 </div>
-
-<div>
-  <a href="{% url 'liste_produits' %}">
-    <button>Voir les produits</button>
-  </a>
-</div>
+{% endblock %}

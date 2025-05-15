@@ -7,6 +7,10 @@ from .forms import FactureForm
 from django.http import HttpResponse
 
 
+def accueil(request):
+    return render(request, 'gestion/accueil.html', {'hide_navbar': True})
+
+
 def liste_produits(request):
     produits = Produit.objects.all().order_by('id')
     paginator = Paginator(produits, 3) 

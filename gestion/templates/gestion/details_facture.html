@@ -1,20 +1,29 @@
-<h1>Détails de la facture {{ facture.id }}</h1>
-<p>Date de création : {{ facture.date_creation }}</p>
-<p>Nombre total de produits : {{ facture.produits.count }}</p>
-<p>Prix Total : {{ facture.total }}€</p>
-<h3>Produits associés :</h3>
-<ul>
-  {% for produit in facture.produits.all %}
-    <li>{{ produit.nom }} - {{ produit.prix }}€</li>
-  {% endfor %}
-</ul>
+{% extends "base.html" %}
 
-<div>
-  <a href="{% url 'telecharger_facture' facture.id %}">
-    <button>Télécharger la facture (.txt)</button>
-  </a>
-</div>
+{% block title %}Détails de la facture {{ facture.id }}{% endblock %}
 
-<div>
-  <a href="{% url 'liste_factures' %}">Retour à la liste des factures</a>
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-4">Détails de la facture {{ facture.id }}</h1>
+  <p><strong>Date de création :</strong> {{ facture.date_creation }}</p>
+  <p><strong>Nombre total de produits :</strong> {{ facture.produits.count }}</p>
+  <p><strong>Prix Total :</strong> {{ facture.total }}€</p>
+
+  <h3>Produits associés :</h3>
+  <ul>
+    {% for produit in facture.produits.all %}
+      <li>{{ produit.nom }} - {{ produit.prix }}€</li>
+    {% empty %}
+      <li>Aucun produit associé.</li>
+    {% endfor %}
+  </ul>
+
+  <div class="mb-3">
+    <a href="{% url 'telecharger_facture' facture.id %}" class="btn btn-success">
+      Télécharger la facture (.txt)
+    </a>
+  </div>
+
+  <a href="{% url 'liste_factures' %}" class="btn btn-secondary">Retour à la liste des factures</a>
 </div>
+{% endblock %}
